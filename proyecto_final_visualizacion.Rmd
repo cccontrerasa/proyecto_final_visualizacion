@@ -1,5 +1,5 @@
 ---
-title: "Short-Term Rentals (STR) in Cambridge, MA"
+title: " Short-Term Rentals (STR) in Cambridge, MA"
 output: 
   flexdashboard::flex_dashboard:
     theme: spacelab
