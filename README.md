@@ -3,5 +3,5 @@
 #Participantes: 
 #  Carolina Vera
 #  Marco Araya 
-#  Fredy Zúñida
+#  Fredy Zúñiga
 #  Cristian Contreras
