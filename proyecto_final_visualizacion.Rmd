@@ -136,9 +136,6 @@ actionButton("update1", "Update")
 ### Map of selected Short-Term Rentals
 
 ```{r}
-content <- paste("<b>","Campus:","</b>",estudiantes$campus,"</br>",
-                 "<b>","Ubicación:","</b>",estudiantes$latitud_campus,", ",estudiantes$longitud_campus,"</br>"
-                 )
 df_bar = eventReactive(input$update1, {
     estudiantes <- estudiantes %>%
       filter(sexo %in% input$sexo,
@@ -150,15 +147,21 @@ df_bar = eventReactive(input$update1, {
 
 
 renderLeaflet({
-leaflet(options =leafletOptions(minZoom =11,maxZoom =16)) %>%
+leaflet() %>%
   #setView(lng = -71.1, lat =42.38, zoom =12) %>%
   addTiles() %>%
   addMarkers(lng = ~longitud_campus,
              lat = ~latitud_campus,
              data = df_bar(),
-             popup = content) #%>%
-  #addProviderTiles(providers$CartoDB.Positron) %>%
-  #addMiniMap()
+            popup = ~paste(
+              "Campus: ", `campus`, "<br>",
+              "Longitud: ", `longitud_campus`, "<br>",
+              "Latitud: ", `latitud_campus`, "<br>",
+            "Cantidad de estudiantes: ", `cantidad`
+            )
+            ) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addMiniMap()
 })
 
 
