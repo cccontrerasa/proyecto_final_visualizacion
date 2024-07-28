@@ -381,9 +381,107 @@ p1 <- ggplotly(
 
 ```
 
+# Distribución de estudiantes por carrera y género {data-icon="ion-stats-bars"}
+
+## Inputs {.sidebar data-width="300"}
+```{r}
+pickerInput("sexo_line",
+            label = "Seleccione género",
+            choices = sexo_list,
+            selected = sexo_list, 
+            options = list(`actions-box` = TRUE),
+            multiple = TRUE)
+
+pickerInput("carrera_line",
+            label = "Seleccione Carrera",
+            choices = carrera_list,
+            selected = carrera_list, 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+
+actionButton("update_line", "Update")
+```
 
 
+## Column
 
+### Gráfico para carreras elegidas por hombres
+```{r}
+df_line <- eventReactive(input$update_line, {
+    estudiantes %>%
+      filter(sexo %in% input$sexo_line,
+             carrera %in% input$carrera_line) %>%
+      group_by(carrera, sexo) %>%
+      summarise(cantidad = n())
+})
+
+output$plot_men <- renderPlotly({
+  df_men <- df_line() %>%
+    filter(sexo == "Masculino")
+
+  p_men <- ggplot(df_men, aes(x = carrera, y = cantidad, color = carrera, group = carrera)) +
+    geom_point(size = 3, aes(text = paste("Carrera: ", carrera, "<br>Cantidad: ", cantidad, "<br>Género: Masculino"))) +
+    labs(title = "Carreras elegidas por hombres",
+         x = "Carrera",
+         y = "Cantidad de estudiantes") +
+    theme_minimal() +
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
+
+  ggplotly(p_men, tooltip = "text")
+})
+
+plotlyOutput("plot_men")
+```
+
+## Column
+
+### Gráfico para carreras elegidas por mujeres
+
+```{r}
+output$plot_women <- renderPlotly({
+  df_women <- df_line() %>%
+    filter(sexo == "Femenino")
+
+  p_women <- ggplot(df_women, aes(x = carrera, y = cantidad, color = carrera, group = carrera)) +
+    geom_point(size = 3, aes(text = paste("Carrera: ", carrera, "<br>Cantidad: ", cantidad, "<br>Género: Femenino"))) +
+    labs(title = "Carreras elegidas por mujeres",
+         x = "Carrera",
+         y = "Cantidad de estudiantes") +
+    theme_minimal() +
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
+
+  ggplotly(p_women, tooltip = "text")
+})
+
+plotlyOutput("plot_women")
+```
+
+## Column
+
+### Gráfico comparativo entre hombres y mujeres
+```{r}
+output$plot_comparative <- renderPlotly({
+  df_comparative <- df_line() %>%
+    filter(sexo %in% c("Masculino", "Femenino"))
+
+  p_comparative <- ggplot(df_comparative, aes(x = carrera, y = cantidad, color = sexo, group = sexo)) +
+    geom_line(size = 1.2) +
+    geom_point(size = 3, aes(text = paste("Carrera: ", carrera, "<br>Cantidad: ", cantidad, "<br>Género: ", sexo))) +
+    labs(title = "Comparación de carreras elegidas por género",
+         x = "Carrera",
+         y = "Cantidad de estudiantes") +
+    theme_minimal() +
+    theme(axis.text.x = element_blank(),
+          axis.ticks.x = element_blank())
+
+  ggplotly(p_comparative, tooltip = "text")
+})
+
+plotlyOutput("plot_comparative")
+```
 
 
 
