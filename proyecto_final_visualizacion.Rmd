@@ -522,7 +522,7 @@ renderDT({
 ### **DICCIONARIO DATA**
 
 1) Los datos han sido proporcionados por dos integrantes del equipo que trabajan en la UTEM.
-2) Las ubicación de las comunas de chile se obtuvo desde el siguiente link:
+2) La ubicación de las comunas de chile se obtuvo desde el siguiente link:
 "https://github.com/altazor-1967/Comunas-de-Chile/blob/master/Latitud%20-%20Longitud%20Chile.csv"
 
 Diccionario Data 
