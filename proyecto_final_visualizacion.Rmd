@@ -1,5 +1,5 @@
 ---
-title: "Análisis de datos de estudiantes de la UTEM (campus, carrera, comuna)"
+title: "Análisis de datos de estudiantes de la UTEM"
 output: 
   flexdashboard::flex_dashboard:
     theme: spacelab
@@ -79,7 +79,7 @@ region_list3 <- sort(unique(estudiantes$region))
 
 ```{r}
 h2("Distribución de estudiantes de la UTEM", style = "text-align:center; font-weight:bold;")
-h5("Análisis de datos de estudiantes de la UTEM (campus, carrera, comuna)", style = "text-align:center;")
+h5("Análisis de datos de estudiantes de la UTEM (campus, carrera, región, género)", style = "text-align:center;")
 ```
 
 ## Column {.data-width=650}
@@ -94,23 +94,24 @@ img_div
 ```
 
 ```{r}
-actionButton("show_popup1", "Distribución por Campus", style = "position: absolute; top: 35%; left: 10%; width: 275px")
-actionButton("show_popup2", "Distribución por Comuna", style = "position: absolute; top: 50%; left: 10%; width: 275px")
-actionButton("show_popup3", "Distribución por Carrera", style = "position: absolute; top: 65%; left: 10%; width: 275px")
-actionButton("show_popup4", "Acerca de", style = "position: absolute; top: 80%; left: 10%; width: 275px")
+actionButton("show_popup1", "Estudiantes por Campus", style = "position: absolute; top: 35%; left: 10%; width: 275px")
+actionButton("show_popup2", "Estudiantes por Región", style = "position: absolute; top: 45%; left: 10%; width: 275px")
+actionButton("show_popup3", "Estudiantes por Carrera", style = "position: absolute; top: 55%; left: 10%; width: 275px")
+actionButton("show_popup4", "Estudiantes por Carrera y género", style = "position: absolute; top: 65%; left: 10%; width: 275px")
+actionButton("show_popup5", "Acerca de", style = "position: absolute; top: 75%; left: 10%; width: 275px")
 
 observeEvent(input$show_popup1, {
   showModal(modalDialog(
     title = "Estudiantes por campus",
-    p("En esta sección podrá consultar la cantidad de alumnos por Campus filtrando por género, carrera, nacionalidad, comuna y región."),
+    p("En esta sección podrá consultar la cantidad de alumnos por Campus filtrando por género, carrera y nacionalidad."),
     footer = modalButton("Close")
   ))
 })
 
 observeEvent(input$show_popup2, {
   showModal(modalDialog(
-    title = "Estudiantes por comuna",
-    p("En esta sección podrá consultar la cantidad de alumnos por comuna filtrando por género, carrera, nacionalidad, comuna y región."),
+    title = "Estudiantes por región",
+    p("En esta sección podrá consultar la cantidad de alumnos por comuna filtrando por género, carrera, nacionalidad y región."),
     footer = modalButton("Close")
   ))
 })
@@ -118,13 +119,22 @@ observeEvent(input$show_popup2, {
 
 observeEvent(input$show_popup3, {
   showModal(modalDialog(
-    title = "Distribución por carrera",
-    p("En esta sección podrá consultar la cantidad de alumnos por carrera filtrando por género, carrera, nacionalidad, comuna y región."),
+    title = "Estudiantes por carrera",
+    p("En esta sección podrá consultar la cantidad de alumnos por carrera filtrando por género, nacionalidad, comuna y escuela"),
     footer = modalButton("Close")
   ))
 })
 
 observeEvent(input$show_popup4, {
+  showModal(modalDialog(
+    title = "Estudiantes por carrera y género",
+    p("En esta sección podrá consultar la cantidad de alumnos por carrera y género."),
+    footer = modalButton("Close")
+  ))
+})
+
+
+observeEvent(input$show_popup5, {
   showModal(modalDialog(
     title = "Acerca de",
     p("Dashboard desarrollado como proyecto final del módulo 4 del diplomado de Análisis de Datos. Desarrollado por Marco Araya, Carolina Vera, Cristian Contreras, Fredy Zúñiga."),
@@ -197,15 +207,6 @@ leaflet() %>%
             ) %>%
   addProviderTiles(providers$CartoDB.Positron)
 })
-
-
-#renderPlotly({
-#p1 <- ggplotly(
-#  ggplot(data = df_bar(), mapping = aes(x = campus)) +
-#    geom_bar()
-#)
-#  })
-
 
 
 ```
@@ -520,10 +521,11 @@ renderDT({
 
 ### **DICCIONARIO DATA**
 
-El dataset proviene: ("indicar donde obtuvimos data").
+1) Los datos han sido proporcionados por dos integrantes del equipo que trabajan en la UTEM.
+2) Las ubicación de las comunas de chile se obtuvo desde el siguiente link:
+"https://github.com/altazor-1967/Comunas-de-Chile/blob/master/Latitud%20-%20Longitud%20Chile.csv"
 
 Diccionario Data 
-
 
 | Nombre Columnas             | Descripción                                                            |
 |---------------------|---------------------------------------------------|
@@ -541,6 +543,7 @@ Diccionario Data
 
 
 ### **METADATOS**
+
 
 **Título:** "Análisis de datos de estudiantes de la UTEM (campus, carrera, comuna)"
 
@@ -570,8 +573,6 @@ Longitud: Complementando la latitud, esta variable numérica continua ofrece la 
 
 Importancia del Análisis de estas Variables:
 El análisis de estas variables permite obtener insights valiosos sobre la composición y características de la población estudiantil. Por ejemplo, la distribución por género (sexo) y nacionalidad ayuda a identificar la diversidad y equidad en la institución. Las variables geográficas (comuna, región, latitud, longitud) permiten evaluar la accesibilidad y cobertura territorial de la universidad. Las variables académicas (carrera, escuela, facultad, campus) facilitan el análisis del rendimiento académico, la demanda de programas específicos y la distribución de recursos académicos.
-
-
 
 En resumen, este conjunto de datos es una herramienta poderosa para comprender mejor las características de la población estudiantil y apoyar la gestión académica y administrativa de la institución, como la planificación de recursos, políticas de inclusión y la mejora de la infraestructura educativa.
 
