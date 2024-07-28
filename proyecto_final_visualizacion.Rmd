@@ -516,33 +516,87 @@ renderDT({
   })
 ```
 
-# About {data-orientation="rows" data-icon="fa-info-circle"}
+# Acerca de {data-orientation="rows" data-icon="fa-info-circle"}
 
-### **DATA DICTIONARY**
+### **DICCIONARIO DATA**
 
-Los datos han sido proporcionados por dos integrantes del equipo que trabajan en la UTEM.
+El dataset proviene: ("indicar donde obtuvimos data").
 
-
-| Column Name                 | Description                                                            |
-|---------------------|--------------------------------------------------------------------------------|
-| **Sexo**                    | Genero del alumno : Femenino, Masculino                                |
-| **Nacionalidad**            | Nacionalidad del alumno: Chilena, Extranjero                           |
-| **Comuna**                  | Comuna de origen del alumno                                            |
-| **Region**                  | Región de origen del alumno                                            |
-| **Carrera**                 | Carrera en la que se matriculó el alumno                               |
-| **Escuela**                 | Escuela a la que pertenece la carrera                                  |
-| **Facultad**                | Facultad en la que se dicta la carrera                                 |
-| **Campus**                  | Campus donde se encuentra la Facultad                                  |
-
-### **META INFORMATION**
-
-**Title:** Distribución de los alumnos de la UTEM
-
-**Summary:**\
-Esta BD contiene los datos de los alumnos que se han matriculado a alguna carrera que dicta la UTEM.
+Diccionario Data 
 
 
+| Nombre Columnas             | Descripción                                                            |
+|---------------------|---------------------------------------------------|
+| **sexo**                     | Género del estudiante (por ejemplo, masculino, femenino, no específicado).                                                                  |
+| **nacionalidad**             | Nacionalidad del estudiante (por ejemplo, chilena, argentina, peruana).                               |
+| **comuna**                   | Comuna de origen del estudiante.                                       |
+| **provincia**                | Provincia de origen del estudiante.                                    |
+| **region**                   | Región de origen del estudiante.                                       |
+| **carrera**                  | Carrera que está cursando el estudiante (por ejemplo, Ingeniería, Arquitectura, Derecho).                                                       |
+| **escuela**                  | Escuela o departamento al que pertenece la carrera del estudiante.                                    |
+| **facultad**                 | Facultad a la que pertenece la escuela del estudiante.                                            |
+| **campus**                   | Campus universitario donde el estudiante está matriculado.              |
+| **Latitud**                  | Coordenada de latitud del campus del estudiante.                    |
+| **Longitud**                 | Coordenada de longitud del campus o del estudiante. |
+
+
+### **METADATOS**
+
+**Título:** "Análisis de datos de estudiantes de la UTEM (campus, carrera, comuna)"
+
+**Resumen:**\
+Este conjunto de datos proporciona información detallada sobre los estudiantes Utem, abarcando aspectos demográficos, académicos y geográficos. Las variables incluidas permiten un análisis exhaustivo de las características y distribuciones dentro de la población estudiantil.
+
+Descripción de las Variables:
+Sexo: Esta variable categórica indica el género del estudiante, que puede ser masculino, femenino u otro. Analizar esta variable permite observar la distribución de género dentro de la población estudiantil.
+
+Nacionalidad: Variable categórica que especifica el país de origen de los estudiantes. Esto es crucial para entender la diversidad cultural y la presencia de estudiantes internacionales en la institución.
+
+Comuna: También categórica, esta variable señala la comuna de residencia del estudiante, ofreciendo una perspectiva sobre la distribución geográfica a nivel local.
+
+Región: Otra variable categórica que detalla la región de procedencia de los estudiantes, proporcionando un marco más amplio que la comuna para el análisis geográfico.
+
+Carrera: Variable categórica que indica la carrera o programa académico en el que el estudiante está matriculado. Este dato es fundamental para evaluar la distribución de estudiantes entre diferentes disciplinas y programas.
+
+Escuela: Esta variable categórica identifica la escuela o departamento académico al que pertenece la carrera del estudiante, permitiendo análisis específicos por unidades académicas.
+
+Facultad: Similar a la escuela, esta variable categórica clasifica a los estudiantes según la facultad a la que pertenecen, facilitando el análisis a nivel de facultades.
+
+Campus: Variable categórica que designa el campus universitario donde el estudiante está matriculado. Esto es esencial para analizar la distribución de estudiantes en distintos campus de la institución.
+
+Latitud: Variable numérica continua que proporciona la coordenada de latitud del campus o lugar de residencia del estudiante. Este dato es útil para la geolocalización y análisis espacial.
+
+Longitud: Complementando la latitud, esta variable numérica continua ofrece la coordenada de longitud. Juntas, estas coordenadas permiten mapear y visualizar geográficamente la distribución de los estudiantes.
+
+Importancia del Análisis de estas Variables:
+El análisis de estas variables permite obtener insights valiosos sobre la composición y características de la población estudiantil. Por ejemplo, la distribución por género (sexo) y nacionalidad ayuda a identificar la diversidad y equidad en la institución. Las variables geográficas (comuna, región, latitud, longitud) permiten evaluar la accesibilidad y cobertura territorial de la universidad. Las variables académicas (carrera, escuela, facultad, campus) facilitan el análisis del rendimiento académico, la demanda de programas específicos y la distribución de recursos académicos.
 
 
 
+En resumen, este conjunto de datos es una herramienta poderosa para comprender mejor las características de la población estudiantil y apoyar la gestión académica y administrativa de la institución, como la planificación de recursos, políticas de inclusión y la mejora de la infraestructura educativa.
 
+
+**Publicado:** 
+
+**Date Created:** 
+
+**Last Updated:** 
+
+**Data Proviene de:** Universidad Técnologica Metropilitana Departamento
+
+**Dueño Dataset :** Universidad Técnologica Metropolitana
+
+**Desarrolladores:**
+
+-   Marco Araya
+
+-   Cristian Contreras
+
+-   Carolina Vera
+
+-   Fredy Zúñiga
+
+| Dashboard version       | Dashboard upload date      |   Version note         |
+|:-----------------------:|:--------------------------:|:----------------------:|
+|1.0.0                    | 29/07/2024                 |   Official release     |
+|0.5.0                    | 28/07/2024                 |  Working draft         |
