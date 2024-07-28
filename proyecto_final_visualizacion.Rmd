@@ -1,5 +1,5 @@
 ---
-title: " Short-Term Rentals (STR) in Cambridge, MA"
+title: "Análisis de datos de estudiantes de la UTEM (campus, carrera, comuna)"
 output: 
   flexdashboard::flex_dashboard:
     theme: spacelab
@@ -48,16 +48,34 @@ nacionalidad_list <- sort(unique(estudiantes$nacionalidad))
 carrera_list <- sort(unique(estudiantes$carrera))
 facultad_list <- sort(unique(estudiantes$facultad))
 comuna_list <- sort(unique(estudiantes$comuna))
+region_list <- sort(unique(estudiantes$region))
 
 
 ```
+
+
+```{r}
+
+#"https://github.com/altazor-1967/Comunas-de-Chile/blob/master/Latitud%20-%20Longitud%20Chile.csv"
+LatLonChile <- read.csv2("Latitud - Longitud Chile.csv",fileEncoding='latin1',check.names=F)
+
+
+LatLonChile <- LatLonChile %>%
+  mutate(latitud = as.numeric(latitud),
+         longitud = as.numeric(longitud))
+
+
+
+```
+
+
+
 
 # Home Page {data-icon="ion-home"}
 
 ```{r}
 h2("Distribución de estudiantes de la UTEM", style = "text-align:center; font-weight:bold;")
-h5("Glosa H5", style = "text-align:center;")
-h5("Glosa H52", style = "text-align:center;")
+h5("Análisis de datos de estudiantes de la UTEM (campus, carrera, comuna)", style = "text-align:center;")
 ```
 
 ## Column {.data-width=650}
@@ -72,36 +90,46 @@ img_div
 ```
 
 ```{r}
-actionButton("show_popup1", "Distribución geográfica", style = "position: absolute; top: 35%; left: 10%; width: 275px")
-actionButton("show_popup2", "Distribución por carrera", style = "position: absolute; top: 55%; left: 10%; width: 275px")
-actionButton("show_popup3", "Acerca de", style = "position: absolute; top: 75%; left: 10%; width: 275px")
+actionButton("show_popup1", "Distribución por Campus", style = "position: absolute; top: 35%; left: 10%; width: 275px")
+actionButton("show_popup2", "Distribución por Comuna", style = "position: absolute; top: 50%; left: 10%; width: 275px")
+actionButton("show_popup3", "Distribución por Carrera", style = "position: absolute; top: 65%; left: 10%; width: 275px")
+actionButton("show_popup4", "Acerca de", style = "position: absolute; top: 80%; left: 10%; width: 275px")
 
 observeEvent(input$show_popup1, {
   showModal(modalDialog(
-    title = "Distribución geográfica",
-    p("In this section, you can explore the spatial distribution of the Short-Term Rentals and use filters of your choice such as zipcode, STR type, property type, services listed, etc. Also, you can interact with the map, click on the icons, and learn the detailed characteristics of the STRs."),
+    title = "Estudiantes por campus",
+    p("En esta sección podrá consultar la cantidad de alumnos por Campus filtrando por género, carrera, nacionalidad, comuna y región."),
     footer = modalButton("Close")
   ))
 })
 
 observeEvent(input$show_popup2, {
   showModal(modalDialog(
-    title = "Distribución por carrera",
-    p("In this section, you can perform a boxplot analysis of the Short-Term Rentals with some inputs of your choice. You can explore the distribution of a variable of interest grouped by another variable and   gain insights about the number of bedrooms, bathrooms, maximum rented capacity and more."),
+    title = "Estudiantes por comuna",
+    p("En esta sección podrá consultar la cantidad de alumnos por comuna filtrando por género, carrera, nacionalidad, comuna y región."),
     footer = modalButton("Close")
   ))
 })
 
+
 observeEvent(input$show_popup3, {
   showModal(modalDialog(
-    title = "About",
-    p("In this section, you can learn more about the definitions of the variables, explore the data source and learn more about the developers behind this dashboard."),
+    title = "Distribución por carrera",
+    p("En esta sección podrá consultar la cantidad de alumnos por carrera filtrando por género, carrera, nacionalidad, comuna y región."),
+    footer = modalButton("Close")
+  ))
+})
+
+observeEvent(input$show_popup4, {
+  showModal(modalDialog(
+    title = "Acerca de",
+    p("Dashboard desarrollado como proyecto final del módulo 4 del diplomado de Análisis de Datos. Desarrollado por Marco Araya, Carolina Vera, Cristian Contreras, Fredy Zúñiga."),
     footer = modalButton("Close")
   ))
 })
 ```
 
-# Spatial distribution {data-icon="ion-earth"}
+# Estudiantes por Campus {data-icon="ion-earth"}
 
 ## Inputs {.sidebar data-width="300"}
 
@@ -127,17 +155,19 @@ pickerInput("nacionalidad",
                            `selected-text-format` = "count > 2"),
             multiple = TRUE)
 
+
 actionButton("update1", "Update")
+
 
 ```
 
 ## Column
 
-### Map of selected Short-Term Rentals
+### Mapa de campus
 
 ```{r}
 df_bar = eventReactive(input$update1, {
-    estudiantes <- estudiantes %>%
+    estudiantesTmp <- estudiantes %>%
       filter(sexo %in% input$sexo,
              carrera %in% input$carrera,
              nacionalidad %in% input$nacionalidad) %>%
@@ -175,3 +205,199 @@ leaflet() %>%
 
 
 ```
+
+
+
+
+# Estudiantes por comuna {data-icon="ion-earth"}
+
+## Inputs {.sidebar data-width="300"}
+```{r}
+pickerInput("sexo",
+            label = "Seleccione género",
+            choices = sexo_list,
+            selected = sexo_list, 
+            options = list(`actions-box` = TRUE),
+          multiple = TRUE)
+pickerInput("carrera",
+            label = "Seleccione Carrera",
+            choices = carrera_list,
+            selected = carrera_list[1], 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+pickerInput("nacionalidad",
+            label = "Seleccione nacionalidad",
+            choices = nacionalidad_list,
+            selected = nacionalidad_list[1], 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+
+pickerInput("comuna",
+            label = "Seleccione Comuna",
+            choices = comuna_list,
+            selected = comuna_list[1], 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+
+pickerInput("region",
+            label = "Seleccione Región",
+            choices = region_list,
+            selected = region_list[1], 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+
+
+actionButton("update2", "Update")
+
+
+
+```
+
+
+
+## Column
+
+### Mapa de estudiantes por comuna
+```{r}
+
+df_bar2 = eventReactive(input$update2, {
+    estudiantesTmp <- merge(x = estudiantes, y = LatLonChile, by = "comuna") %>%
+      filter(sexo %in% input$sexo,
+             carrera %in% input$carrera,
+             nacionalidad %in% input$nacionalidad,
+            # region %in% input$region,
+             comuna %in% input$comuna
+             ) %>%
+      group_by(comuna, longitud, latitud) %>%
+      summarise(cantidad = n())
+  })
+
+
+renderLeaflet({
+leaflet() %>%
+  #setView(lng = -71.1, lat =42.38, zoom =12) %>%
+  addTiles() %>%
+  addMarkers(lng = ~longitud,
+             lat = ~latitud,
+             data = df_bar2() ,
+            popup = ~paste(
+              "Comuna: ", `comuna`, "<br>",
+              #"Región: ", `region`, "<br>",
+              "Longitud: ", `longitud`, "<br>",
+              "Latitud: ", `latitud`, "<br>",
+            "Cantidad de estudiantes: ", `cantidad`
+            )
+            ) %>%
+  addProviderTiles(providers$CartoDB.Positron) %>%
+  addMiniMap()
+})
+
+
+
+```
+
+
+
+
+
+
+
+
+
+
+# Estudiantes por carrera {data-icon="ion-earth"}
+
+## Inputs {.sidebar data-width="300"}
+```{r}
+pickerInput("sexo",
+            label = "Seleccione género",
+            choices = sexo_list,
+            selected = sexo_list, 
+            options = list(`actions-box` = TRUE),
+          multiple = TRUE)
+pickerInput("carrera",
+            label = "Seleccione Carrera",
+            choices = carrera_list,
+            selected = carrera_list[1], 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+pickerInput("nacionalidad",
+            label = "Seleccione nacionalidad",
+            choices = nacionalidad_list,
+            selected = nacionalidad_list[1], 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+
+pickerInput("comuna",
+            label = "Seleccione Comuna",
+            choices = comuna_list,
+            selected = comuna_list[1], 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+
+pickerInput("region",
+            label = "Seleccione Región",
+            choices = region_list,
+            selected = region_list[1], 
+            options = list(`actions-box` = TRUE,
+                           `selected-text-format` = "count > 2"),
+            multiple = TRUE)
+
+
+actionButton("update3", "Update")
+
+
+
+```
+
+
+
+## Column
+
+### Gráfico barra de estudiantes por carrera
+
+```{r}
+
+df_bar3 = eventReactive(input$update3, {
+    estudiantesTmp <- estudiantes %>%
+      filter(sexo %in% input$sexo,
+             carrera %in% input$carrera,
+             nacionalidad %in% input$nacionalidad,
+             region %in% input$region,
+             comuna %in% input$comuna
+             ) #%>%
+      #group_by(comuna) %>%
+      #count()
+      #summarise(n = n()) #%>%
+      #filter(cantidad > 500)
+  })
+
+
+renderPlotly({
+p1 <- ggplotly(
+  ggplot(data = df_bar3(), mapping = aes(x=carrera)) +
+  #  geom_bar()
+    geom_bar(fill="red",color="white")+
+  xlab("carrera")+
+  ylab("Cantidad")+
+  theme(axis.title=element_text(size=14,face="bold"))
+  
+)
+  })
+
+
+```
+
+
+
+
+
+
+
