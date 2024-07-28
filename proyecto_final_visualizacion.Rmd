@@ -41,6 +41,18 @@ estudiantes <- estudiantes %>%
       )
     )
 
+#"https://github.com/altazor-1967/Comunas-de-Chile/blob/master/Latitud%20-%20Longitud%20Chile.csv"
+LatLonChile <- read.csv2("Latitud - Longitud Chile.csv",fileEncoding='latin1',check.names=F)
+
+
+LatLonChile <- LatLonChile %>%
+  mutate(latitud = as.numeric(latitud),
+         longitud = as.numeric(longitud)) %>%
+  rename(latitud_comuna = latitud, longitud_comuna = longitud)
+
+LatLonChile <- LatLonChile[, !names(LatLonChile) %in% c("cut", "provincia", "region")]
+
+estudiantes <- merge(x = estudiantes, y = LatLonChile, by = "comuna")
 
 
 sexo_list <- sort(unique(estudiantes$sexo))
@@ -50,25 +62,17 @@ facultad_list <- sort(unique(estudiantes$facultad))
 comuna_list <- sort(unique(estudiantes$comuna))
 region_list <- sort(unique(estudiantes$region))
 
+sexo_list2 <- sort(unique(estudiantes$sexo))
+nacionalidad_list2 <- sort(unique(estudiantes$nacionalidad))
+carrera_list2 <- sort(unique(estudiantes$carrera))
+region_list2 <- sort(unique(estudiantes$region))
 
+
+sexo_list3 <- sort(unique(estudiantes$sexo))
+nacionalidad_list3 <- sort(unique(estudiantes$nacionalidad))
+escuela_list3 <- sort(unique(estudiantes$escuela))
+region_list3 <- sort(unique(estudiantes$region))
 ```
-
-
-```{r}
-
-#"https://github.com/altazor-1967/Comunas-de-Chile/blob/master/Latitud%20-%20Longitud%20Chile.csv"
-LatLonChile <- read.csv2("Latitud - Longitud Chile.csv",fileEncoding='latin1',check.names=F)
-
-
-LatLonChile <- LatLonChile %>%
-  mutate(latitud = as.numeric(latitud),
-         longitud = as.numeric(longitud))
-
-
-
-```
-
-
 
 
 # Home Page {data-icon="ion-home"}
@@ -180,9 +184,10 @@ renderLeaflet({
 leaflet() %>%
   #setView(lng = -71.1, lat =42.38, zoom =12) %>%
   addTiles() %>%
-  addMarkers(lng = ~longitud_campus,
+  addCircleMarkers(lng = ~longitud_campus,
              lat = ~latitud_campus,
              data = df_bar(),
+             radius = ~sqrt(cantidad),
             popup = ~paste(
               "Campus: ", `campus`, "<br>",
               "Longitud: ", `longitud_campus`, "<br>",
@@ -190,8 +195,7 @@ leaflet() %>%
             "Cantidad de estudiantes: ", `cantidad`
             )
             ) %>%
-  addProviderTiles(providers$CartoDB.Positron) %>%
-  addMiniMap()
+  addProviderTiles(providers$CartoDB.Positron)
 })
 
 
@@ -209,51 +213,36 @@ leaflet() %>%
 
 
 
-# Estudiantes por comuna {data-icon="ion-earth"}
+# Estudiantes por región {data-icon="ion-earth"}
 
 ## Inputs {.sidebar data-width="300"}
 ```{r}
-pickerInput("sexo",
+pickerInput("sexo2",
             label = "Seleccione género",
-            choices = sexo_list,
-            selected = sexo_list, 
+            choices = sexo_list2,
+            selected = sexo_list2, 
             options = list(`actions-box` = TRUE),
           multiple = TRUE)
-pickerInput("carrera",
+pickerInput("carrera2",
             label = "Seleccione Carrera",
-            choices = carrera_list,
-            selected = carrera_list[1], 
+            choices = carrera_list2,
+            selected = carrera_list2, 
             options = list(`actions-box` = TRUE,
                            `selected-text-format` = "count > 2"),
             multiple = TRUE)
-pickerInput("nacionalidad",
+pickerInput("nacionalidad2",
             label = "Seleccione nacionalidad",
-            choices = nacionalidad_list,
-            selected = nacionalidad_list[1], 
-            options = list(`actions-box` = TRUE,
-                           `selected-text-format` = "count > 2"),
+            choices = nacionalidad_list2,
+            selected = nacionalidad_list2,
             multiple = TRUE)
 
-pickerInput("comuna",
-            label = "Seleccione Comuna",
-            choices = comuna_list,
-            selected = comuna_list[1], 
-            options = list(`actions-box` = TRUE,
-                           `selected-text-format` = "count > 2"),
-            multiple = TRUE)
-
-pickerInput("region",
+pickerInput("region2",
             label = "Seleccione Región",
-            choices = region_list,
-            selected = region_list[1], 
-            options = list(`actions-box` = TRUE,
-                           `selected-text-format` = "count > 2"),
-            multiple = TRUE)
+            choices = region_list2,
+            selected = region_list2[1])
 
 
 actionButton("update2", "Update")
-
-
 
 ```
 
@@ -261,34 +250,34 @@ actionButton("update2", "Update")
 
 ## Column
 
-### Mapa de estudiantes por comuna
+### Mapa de estudiantes por región
 ```{r}
 
-df_bar2 = eventReactive(input$update2, {
-    estudiantesTmp <- merge(x = estudiantes, y = LatLonChile, by = "comuna") %>%
-      filter(sexo %in% input$sexo,
-             carrera %in% input$carrera,
-             nacionalidad %in% input$nacionalidad,
-            # region %in% input$region,
-             comuna %in% input$comuna
+df_bar2 <- eventReactive(input$update2, {
+    print(region_list3)
+    print(input$region)
+    estudiantesTmp <- estudiantes %>%
+      filter(sexo %in% input$sexo2,
+             carrera %in% input$carrera2,
+             nacionalidad %in% input$nacionalidad2,
+             region %in% input$region2
              ) %>%
-      group_by(comuna, longitud, latitud) %>%
+      group_by(comuna, longitud_comuna, latitud_comuna) %>%
       summarise(cantidad = n())
   })
-
 
 renderLeaflet({
 leaflet() %>%
   #setView(lng = -71.1, lat =42.38, zoom =12) %>%
   addTiles() %>%
-  addMarkers(lng = ~longitud,
-             lat = ~latitud,
+  addMarkers(lng = ~longitud_comuna,
+             lat = ~latitud_comuna,
              data = df_bar2() ,
             popup = ~paste(
               "Comuna: ", `comuna`, "<br>",
               #"Región: ", `region`, "<br>",
-              "Longitud: ", `longitud`, "<br>",
-              "Latitud: ", `latitud`, "<br>",
+              "Longitud: ", `longitud_comuna`, "<br>",
+              "Latitud: ", `latitud_comuna`, "<br>",
             "Cantidad de estudiantes: ", `cantidad`
             )
             ) %>%
@@ -313,39 +302,31 @@ leaflet() %>%
 
 ## Inputs {.sidebar data-width="300"}
 ```{r}
-pickerInput("sexo",
+pickerInput("sexo3",
             label = "Seleccione género",
-            choices = sexo_list,
-            selected = sexo_list, 
+            choices = sexo_list3,
+            selected = sexo_list3, 
             options = list(`actions-box` = TRUE),
           multiple = TRUE)
-pickerInput("carrera",
-            label = "Seleccione Carrera",
-            choices = carrera_list,
-            selected = carrera_list[1], 
-            options = list(`actions-box` = TRUE,
-                           `selected-text-format` = "count > 2"),
-            multiple = TRUE)
-pickerInput("nacionalidad",
+pickerInput("nacionalidad3",
             label = "Seleccione nacionalidad",
-            choices = nacionalidad_list,
-            selected = nacionalidad_list[1], 
-            options = list(`actions-box` = TRUE,
-                           `selected-text-format` = "count > 2"),
+            choices = nacionalidad_list3,
+            selected = nacionalidad_list3[1], 
+            options = list(`actions-box` = TRUE),
             multiple = TRUE)
 
-pickerInput("comuna",
+pickerInput("region3",
             label = "Seleccione Comuna",
-            choices = comuna_list,
-            selected = comuna_list[1], 
+            choices = region_list3,
+            selected = region_list3[13], 
             options = list(`actions-box` = TRUE,
                            `selected-text-format` = "count > 2"),
             multiple = TRUE)
 
-pickerInput("region",
-            label = "Seleccione Región",
-            choices = region_list,
-            selected = region_list[1], 
+pickerInput("escuela3",
+            label = "Seleccione Escuela",
+            choices = escuela_list3,
+            selected = escuela_list3, 
             options = list(`actions-box` = TRUE,
                            `selected-text-format` = "count > 2"),
             multiple = TRUE)
@@ -367,11 +348,10 @@ actionButton("update3", "Update")
 
 df_bar3 = eventReactive(input$update3, {
     estudiantesTmp <- estudiantes %>%
-      filter(sexo %in% input$sexo,
-             carrera %in% input$carrera,
-             nacionalidad %in% input$nacionalidad,
-             region %in% input$region,
-             comuna %in% input$comuna
+      filter(sexo %in% input$sexo3,
+             nacionalidad %in% input$nacionalidad3,
+             region %in% input$region3,
+             escuela %in% input$escuela3
              ) #%>%
       #group_by(comuna) %>%
       #count()
@@ -382,14 +362,20 @@ df_bar3 = eventReactive(input$update3, {
 
 renderPlotly({
 p1 <- ggplotly(
-  ggplot(data = df_bar3(), mapping = aes(x=carrera)) +
+  ggplot(data = df_bar3(), mapping = aes(x=carrera, fill=factor(carrera))) +
   #  geom_bar()
-    geom_bar(fill="red",color="white")+
-  xlab("carrera")+
-  ylab("Cantidad")+
-  theme(axis.title=element_text(size=14,face="bold"))
-  
-)
+  geom_bar()+
+  theme_bw() +
+  labs(title = "Cantidad de estudiantes por carrera", 
+     x = "Carrera", 
+     y = "Cantidad",
+     fill = "Carrera"
+   ) +
+  theme(
+    axis.title = element_text(size=14,face="bold"),
+    axis.text.x = element_blank(),
+  )
+) 
   })
 
 
