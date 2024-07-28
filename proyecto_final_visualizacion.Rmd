@@ -520,44 +520,29 @@ renderDT({
 
 ### **DATA DICTIONARY**
 
-The dataset can be found [here](https://data.cambridgema.gov/Inspectional-Services/Short-Term-Rentals/wxgv-w968/explore/).
+Los datos han sido proporcionados por dos integrantes del equipo que trabajan en la UTEM.
 
-The official data dictionary can be found [here](https://data.cambridgema.gov/Inspectional-Services/Short-Term-Rentals/wxgv-w968).
 
 | Column Name                 | Description                                                            |
-|---------------------|---------------------------------------------------|
-| **ID**                      | Rental ID Number                                                       |
-| **Issue Date**              | Date of Issue for the Short Term Rental certificate                    |
-| **Address**                 | Address of the STR                                                     |
-| **Latitude**                | Latitude of the location                                               |
-| **Longitude**               | Longitude of the location                                              |
-| **Zipcode**                 | Zipcode of the location                                                |
-| **STR Type**                | Response to form question: "Please select the appropriate STR type"    |
-| **Property Type**           | Description of the building property type                              |
-| **Condominium Association** | Is the Short-Term Rental Unit part of a condominium association?       |
-| **Total Bedrooms**          | Total number of legal bedrooms in the short-term rental unit           |
-| **Rented Bedrooms**         | Number of legal bedrooms to be rented as part of this application      |
-| **Maximum Renter Capacity** | Maximum number of people to which the short term rental will be rented |
-| **Kitchen**                 | Will the kitchen be available to the renter?                           |
-| **Bathrooms**               | Number of bathrooms available to the renter                            |
-| **Airbnb**                  | Whether the rental is listed on this service                           |
-| **HomeAway**                | Whether the rental is listed on this service                           |
-| **FlipKey**                 | Whether the rental is listed on this service                           |
-| **VRBO**                    | Whether the rental is listed on this service                           |
-| **Craigslist**              | Whether the rental is listed on this service                           |
-| **Couch Surfing**           | Whether the rental is listed on this service                           |
-| **Boston Rentals**          | Whether the rental is listed on this service                           |
+|---------------------|--------------------------------------------------------------------------------|
+| **Sexo**                    | Genero del alumno : Femenino, Masculino                                |
+| **Nacionalidad**            | Nacionalidad del alumno: Chilena, Extranjero                           |
+| **Comuna**                  | Comuna de origen del alumno                                            |
+| **Region**                  | Región de origen del alumno                                            |
+| **Carrera**                 | Carrera en la que se matriculó el alumno                               |
+| **Escuela**                 | Escuela a la que pertenece la carrera                                  |
+| **Facultad**                | Facultad en la que se dicta la carrera                                 |
+| **Campus**                  | Campus donde se encuentra la Facultad                                  |
 
 ### **META INFORMATION**
 
-**Title:** Short-term rentals in Cambridge
+**Title:** Distribución de los alumnos de la UTEM
 
 **Summary:**\
-This dataset is part of the **Cambridge's Open Data Program**. It contains information about Short-term rentals (STR) in Cambridge, Massachusetts. STR refers to the rental of any dwelling unit of bedroom as residential accommodation for a duration of less than 30 consecutive days.
+Esta BD contiene los datos de los alumnos que se han matriculado a alguna carrera que dicta la UTEM.
 
-Use cases of this dataset include providing valuable insights into the short-term rental market in Cambridge, like understanding the distribution, density and characteristics of STR across Cambridge neighborhoods, which can be useful for a variety of stakeholders, including policymakers, real estate investors, and community organizations.
 
-**Publisher:** [Open Data - City of Cambridge, MA](https://www.cambridgema.gov/departments/opendata)
+
 
 
 
