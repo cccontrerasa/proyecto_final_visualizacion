@@ -142,11 +142,9 @@ observeEvent(input$show_popup5, {
   ))
 })
 ```
-
 # Estudiantes por Campus {data-icon="ion-earth"}
 
 ## Inputs {.sidebar data-width="300"}
-
 ```{r}
 pickerInput("sexo",
             label = "Seleccione género",
