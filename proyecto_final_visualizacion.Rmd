@@ -214,10 +214,13 @@ leaflet() %>%
 
 
 
-# Estudiantes por región {data-icon="ion-earth"}
+# Estudiantes por región {data-icon="ion-earth"}                                 
 
 ## Inputs {.sidebar data-width="300"}
+###  {} 
+#### []
 ```{r}
+
 pickerInput("sexo2",
             label = "Seleccione género",
             choices = sexo_list2,
@@ -290,18 +293,11 @@ leaflet() %>%
 
 ```
 
-
-
-
-
-
-
-
-
-
 # Estudiantes por carrera {data-icon="ion-earth"}
 
 ## Inputs {.sidebar data-width="300"}
+###  {} 
+#### []
 ```{r}
 pickerInput("sexo3",
             label = "Seleccione género",
@@ -385,7 +381,12 @@ p1 <- ggplotly(
 # Distribución de estudiantes por carrera y género {data-icon="ion-stats-bars"}
 
 ## Inputs {.sidebar data-width="300"}
+###  {} 
+#### []
 ```{r}
+
+
+
 pickerInput("sexo_line",
             label = "Seleccione género",
             choices = sexo_list,
