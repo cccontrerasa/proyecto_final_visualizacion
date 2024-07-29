@@ -74,7 +74,6 @@ escuela_list3 <- sort(unique(estudiantes$escuela))
 region_list3 <- sort(unique(estudiantes$region))
 ```
 
-
 # Home Page {data-icon="ion-home"}
 
 ```{r}
@@ -143,7 +142,6 @@ observeEvent(input$show_popup5, {
 })
 ```
 # Estudiantes por Campus {data-icon="ion-earth"}
-
 ## Inputs {.sidebar data-width="300"}
 ```{r}
 pickerInput("sexo",
