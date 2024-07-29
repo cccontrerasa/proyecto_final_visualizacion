@@ -74,7 +74,7 @@ escuela_list3 <- sort(unique(estudiantes$escuela))
 region_list3 <- sort(unique(estudiantes$region))
 ```
 
-# Home Page {data-icon="ion-home"}
+# Página principal {data-icon="ion-home"}
 
 ```{r}
 h2("Distribución de estudiantes de la UTEM", style = "text-align:center; font-weight:bold;")
@@ -166,7 +166,7 @@ pickerInput("nacionalidad",
             multiple = TRUE)
 
 
-actionButton("update1", "Update")
+actionButton("update1", "Mostrar")
 
 
 ```
@@ -242,7 +242,7 @@ pickerInput("region2",
             selected = region_list2[1])
 
 
-actionButton("update2", "Update")
+actionButton("update2", "Mostrar")
 
 ```
 
@@ -325,7 +325,7 @@ pickerInput("escuela3",
             multiple = TRUE)
 
 
-actionButton("update3", "Update")
+actionButton("update3", "Mostrar")
 
 
 
@@ -357,7 +357,7 @@ renderPlotly({
 p1 <- ggplotly(
   ggplot(data = df_bar3(), mapping = aes(x=carrera, fill=factor(carrera))) +
   #  geom_bar()
-  geom_bar()+
+  geom_bar(aes(text = paste("Carrera: ", fill, "<br>Cantidad: ", ..count..))) +
   theme_bw() +
   labs(title = "Cantidad de estudiantes por carrera", 
      x = "Carrera", 
@@ -367,8 +367,8 @@ p1 <- ggplotly(
   theme(
     axis.title = element_text(size=14,face="bold"),
     axis.text.x = element_blank(),
-  )
-) 
+  ), tooltip = "text"
+)
   })
 
 
@@ -383,91 +383,43 @@ p1 <- ggplotly(
 
 
 
-pickerInput("sexo_line",
-            label = "Seleccione género",
-            choices = sexo_list,
-            selected = sexo_list, 
+pickerInput("region_line",
+            label = "Seleccione región",
+            choices = region_list,
+            selected = region_list[13], 
             options = list(`actions-box` = TRUE),
             multiple = TRUE)
 
-pickerInput("carrera_line",
-            label = "Seleccione Carrera",
-            choices = carrera_list,
-            selected = carrera_list, 
+pickerInput("facultad_line",
+            label = "Seleccione facultad",
+            choices = facultad_list,
+            selected = facultad_list, 
             options = list(`actions-box` = TRUE,
                            `selected-text-format` = "count > 2"),
             multiple = TRUE)
 
-actionButton("update_line", "Update")
-```
-
-
-## Column
-
-### Gráfico para carreras elegidas por hombres
-```{r}
-df_line <- eventReactive(input$update_line, {
-    estudiantes %>%
-      filter(sexo %in% input$sexo_line,
-             carrera %in% input$carrera_line) %>%
-      group_by(carrera, sexo) %>%
-      summarise(cantidad = n())
-})
-
-output$plot_men <- renderPlotly({
-  df_men <- df_line() %>%
-    filter(sexo == "Masculino")
-
-  p_men <- ggplot(df_men, aes(x = carrera, y = cantidad, color = carrera, group = carrera)) +
-    geom_point(size = 3, aes(text = paste("Carrera: ", carrera, "<br>Cantidad: ", cantidad, "<br>Género: Masculino"))) +
-    labs(title = "Carreras elegidas por hombres",
-         x = "Carrera",
-         y = "Cantidad de estudiantes") +
-    theme_minimal() +
-    theme(axis.text.x = element_blank(),
-          axis.ticks.x = element_blank())
-
-  ggplotly(p_men, tooltip = "text")
-})
-
-plotlyOutput("plot_men")
-```
-
-## Column
-
-### Gráfico para carreras elegidas por mujeres
-
-```{r}
-output$plot_women <- renderPlotly({
-  df_women <- df_line() %>%
-    filter(sexo == "Femenino")
-
-  p_women <- ggplot(df_women, aes(x = carrera, y = cantidad, color = carrera, group = carrera)) +
-    geom_point(size = 3, aes(text = paste("Carrera: ", carrera, "<br>Cantidad: ", cantidad, "<br>Género: Femenino"))) +
-    labs(title = "Carreras elegidas por mujeres",
-         x = "Carrera",
-         y = "Cantidad de estudiantes") +
-    theme_minimal() +
-    theme(axis.text.x = element_blank(),
-          axis.ticks.x = element_blank())
-
-  ggplotly(p_women, tooltip = "text")
-})
-
-plotlyOutput("plot_women")
+actionButton("update_line", "Mostrar")
 ```
 
 ## Column
 
 ### Gráfico comparativo entre hombres y mujeres
 ```{r}
+df_line <- eventReactive(input$update_line, {
+    estudiantes %>%
+      filter(region %in% input$region_line,
+             facultad %in% input$facultad_line) %>%
+      group_by(carrera, sexo) %>%
+      summarise(cantidad = n())
+})
+
 output$plot_comparative <- renderPlotly({
   df_comparative <- df_line() %>%
     filter(sexo %in% c("Masculino", "Femenino"))
 
   p_comparative <- ggplot(df_comparative, aes(x = carrera, y = cantidad, color = sexo, group = sexo)) +
-    geom_line(size = 1.2) +
-    geom_point(size = 3, aes(text = paste("Carrera: ", carrera, "<br>Cantidad: ", cantidad, "<br>Género: ", sexo))) +
+    geom_line(size = 1.2, alpha = 0.6) +
+    geom_point(size = 3, alpha = 0.6, aes(text = paste("Carrera: ", carrera, "<br>Cantidad: ", cantidad, "<br>Género: ", sexo))) +
     labs(title = "Comparación de carreras elegidas por género",
          x = "Carrera",
          y = "Cantidad de estudiantes") +
@@ -481,18 +433,17 @@ output$plot_comparative <- renderPlotly({
 plotlyOutput("plot_comparative")
 ```
 
-
-
 ## Column
 
 ### Informacion de los registros seleccionados
+
 
 ```{r}
 table_colnames <- c("Sexo", "Nacionalidad", "Comuna", "Región", "Carrera", "Escuela", "Facultad", "Campus")
 df_table2 <- eventReactive(input$update_line, {
     estudiantes %>%
-      filter(sexo %in% input$sexo_line,
-             carrera %in% input$carrera_line) %>%
+      filter(region %in% input$region_line,
+             facultad %in% input$facultad_line) %>%
       select(sexo, nacionalidad, comuna, region, carrera, escuela, facultad, campus) %>%
     set_colnames(table_colnames)
   })
@@ -506,7 +457,7 @@ renderDT({
                 'copy', 'print', list(
                   extend = 'collection',
                   buttons = c('csv', 'excel', 'pdf'),
-                  text = 'Download'
+                  text = 'Descargar'
                 )),
               paging = FALSE,
               searching = TRUE,
@@ -526,15 +477,15 @@ Diccionario Data
 
 | Nombre Columnas             | Descripción                                                            |
 |---------------------|---------------------------------------------------|
-| **sexo**                     | Género del estudiante (por ejemplo, masculino, femenino, no específicado).                                                                  |
-| **nacionalidad**             | Nacionalidad del estudiante (por ejemplo, chilena, argentina, peruana).                               |
+| **sexo**                     | Género del estudiante (Masculino, Femenino y no específicado).                                                                  |
+| **nacionalidad**             | Nacionalidad del estudiante (Chilena y Extranjera).                               |
 | **comuna**                   | Comuna de origen del estudiante.                                       |
 | **provincia**                | Provincia de origen del estudiante.                                    |
 | **region**                   | Región de origen del estudiante.                                       |
-| **carrera**                  | Carrera que está cursando el estudiante (por ejemplo, Ingeniería, Arquitectura, Derecho).                                                       |
+| **carrera**                  | Carrera del estudiante (por ejemplo, Ingeniería, Arquitectura, Derecho).                                                       |
 | **escuela**                  | Escuela o departamento al que pertenece la carrera del estudiante.                                    |
 | **facultad**                 | Facultad a la que pertenece la escuela del estudiante.                                            |
-| **campus**                   | Campus universitario donde el estudiante está matriculado.              |
+| **campus**                   | Campus universitario donde el estudiante está registrado.              |
 | **Latitud**                  | Coordenada de latitud del campus del estudiante.                    |
 | **Longitud**                 | Coordenada de longitud del campus o del estudiante. |
 
