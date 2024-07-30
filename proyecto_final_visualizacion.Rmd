@@ -77,6 +77,7 @@ region_list3 <- sort(unique(estudiantes$region))
 # Página principal {data-icon="ion-home"}
 
 ```{r}
+# Se setea titulo y subtitulo de pagina principal
 h2("Distribución de estudiantes de la UTEM", style = "text-align:center; font-weight:bold;")
 h5("Análisis de datos de estudiantes de la UTEM (campus, carrera, región, género)", style = "text-align:center;")
 ```
@@ -84,6 +85,7 @@ h5("Análisis de datos de estudiantes de la UTEM (campus, carrera, región, gén
 ## Column {.data-width=650}
 
 ```{r include_image, echo=FALSE}
+# Se define fondo de pantalla de pagina principal
 img_file <- "FondoUTEM.png"
 img_div <- div(
   style = "display:flex; justify-content:center;",
@@ -93,12 +95,14 @@ img_div
 ```
 
 ```{r}
+# Se definen botones para mostrar información de pestañas
 actionButton("show_popup1", "Estudiantes por Campus", style = "position: absolute; top: 35%; left: 10%; width: 275px")
 actionButton("show_popup2", "Estudiantes por Región", style = "position: absolute; top: 45%; left: 10%; width: 275px")
 actionButton("show_popup3", "Estudiantes por Carrera", style = "position: absolute; top: 55%; left: 10%; width: 275px")
 actionButton("show_popup4", "Estudiantes por Carrera y género", style = "position: absolute; top: 65%; left: 10%; width: 275px")
 actionButton("show_popup5", "Acerca de", style = "position: absolute; top: 75%; left: 10%; width: 275px")
 
+# Se crean modals que se activan al clickear en cada boton para mostrar información respectiva
 observeEvent(input$show_popup1, {
   showModal(modalDialog(
     title = "Estudiantes por campus",
@@ -141,9 +145,11 @@ observeEvent(input$show_popup5, {
   ))
 })
 ```
+
 # Estudiantes por Campus {data-icon="ion-earth"}
 ## Inputs {.sidebar data-width="300"}
 ```{r}
+#Se definen filtros para el grafico de estudiantes por campus
 pickerInput("sexo",
             label = "Seleccione género",
             choices = sexo_list,
@@ -165,7 +171,7 @@ pickerInput("nacionalidad",
                            `selected-text-format` = "count > 2"),
             multiple = TRUE)
 
-
+# Se define boton que muestra el grafico
 actionButton("update1", "Mostrar")
 
 
@@ -176,6 +182,7 @@ actionButton("update1", "Mostrar")
 ### Mapa de campus
 
 ```{r}
+#Se aplican los filtros ya definidos a la data
 df_bar = eventReactive(input$update1, {
     estudiantesTmp <- estudiantes %>%
       filter(sexo %in% input$sexo,
@@ -185,7 +192,7 @@ df_bar = eventReactive(input$update1, {
       summarise(cantidad = n())
   })
 
-
+#Se muestra el grafico de mapa con los estudiantes de cada campus
 renderLeaflet({
 leaflet() %>%
   #setView(lng = -71.1, lat =42.38, zoom =12) %>%
@@ -216,7 +223,7 @@ leaflet() %>%
 ###  {} 
 #### {}
 ```{r}
-
+# Se definen filtros para el grafico de estudiantes por región
 pickerInput("sexo2",
             label = "Seleccione género",
             choices = sexo_list2,
@@ -241,7 +248,7 @@ pickerInput("region2",
             choices = region_list2,
             selected = region_list2[1])
 
-
+# Se define boton que muestra el grafico
 actionButton("update2", "Mostrar")
 
 ```
@@ -252,7 +259,7 @@ actionButton("update2", "Mostrar")
 
 ### Mapa de estudiantes por región
 ```{r}
-
+#Se aplican los filtros ya definidos a la data
 df_bar2 <- eventReactive(input$update2, {
     print(region_list3)
     print(input$region)
@@ -266,6 +273,8 @@ df_bar2 <- eventReactive(input$update2, {
       summarise(cantidad = n())
   })
 
+
+#Se muestra el grafico de barra de estudiantes por región
 renderLeaflet({
 leaflet() %>%
   #setView(lng = -71.1, lat =42.38, zoom =12) %>%
@@ -295,6 +304,7 @@ leaflet() %>%
 ###  {} 
 #### {}
 ```{r}
+# Se definen filtros para el grafico de estudiantes por carrera
 pickerInput("sexo3",
             label = "Seleccione género",
             choices = sexo_list3,
@@ -324,11 +334,8 @@ pickerInput("escuela3",
                            `selected-text-format` = "count > 2"),
             multiple = TRUE)
 
-
+# Se define boton que muestra el grafico
 actionButton("update3", "Mostrar")
-
-
-
 ```
 
 
@@ -338,7 +345,7 @@ actionButton("update3", "Mostrar")
 ### Gráfico barra de estudiantes por carrera
 
 ```{r}
-
+#Se aplican los filtros ya definidos a la data
 df_bar3 = eventReactive(input$update3, {
     estudiantesTmp <- estudiantes %>%
       filter(sexo %in% input$sexo3,
@@ -352,7 +359,7 @@ df_bar3 = eventReactive(input$update3, {
       #filter(cantidad > 500)
   })
 
-
+#Se muestra el grafico de barra de estudiantes por carrera
 renderPlotly({
 p1 <- ggplotly(
   ggplot(data = df_bar3(), mapping = aes(x=carrera, fill=factor(carrera))) +
@@ -380,8 +387,7 @@ p1 <- ggplotly(
 ###  {} 
 #### {}
 ```{r}
-
-
+# Se definen filtros para el grafico y tabla de estudiantes por carrera y genero
 
 pickerInput("region_line",
             label = "Seleccione región",
@@ -398,6 +404,7 @@ pickerInput("facultad_line",
                            `selected-text-format` = "count > 2"),
             multiple = TRUE)
 
+# Se define boton que muestra el grafico y tabla
 actionButton("update_line", "Mostrar")
 ```
 
@@ -405,6 +412,7 @@ actionButton("update_line", "Mostrar")
 
 ### Gráfico comparativo entre hombres y mujeres
 ```{r}
+#Se aplican los filtros ya definidos a la data
 df_line <- eventReactive(input$update_line, {
     estudiantes %>%
       filter(region %in% input$region_line,
@@ -413,6 +421,8 @@ df_line <- eventReactive(input$update_line, {
       summarise(cantidad = n())
 })
 
+
+#Se muestra el grafico de linea de n° de estudiantes por carrera y sexo
 output$plot_comparative <- renderPlotly({
   df_comparative <- df_line() %>%
     filter(sexo %in% c("Masculino", "Femenino"))
@@ -439,6 +449,7 @@ plotlyOutput("plot_comparative")
 
 
 ```{r}
+#Se muestra tabla de los datos con los filtros seleccionados
 table_colnames <- c("Sexo", "Nacionalidad", "Comuna", "Región", "Carrera", "Escuela", "Facultad", "Campus")
 df_table2 <- eventReactive(input$update_line, {
     estudiantes %>%
