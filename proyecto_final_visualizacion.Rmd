@@ -214,7 +214,7 @@ leaflet() %>%
 
 ## Inputs {.sidebar data-width="300"}
 ###  {} 
-#### []
+#### {}
 ```{r}
 
 pickerInput("sexo2",
@@ -293,7 +293,7 @@ leaflet() %>%
 
 ## Inputs {.sidebar data-width="300"}
 ###  {} 
-#### []
+#### {}
 ```{r}
 pickerInput("sexo3",
             label = "Seleccione género",
@@ -378,7 +378,7 @@ p1 <- ggplotly(
 
 ## Inputs {.sidebar data-width="300"}
 ###  {} 
-#### []
+#### {}
 ```{r}
 
 
